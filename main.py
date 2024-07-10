@@ -5,10 +5,18 @@ import scorebar
 
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
+MUSIC_PATH = ASSET_PATH + "music.mp3"
 
 # init window
 pg.init()
 pg.display.set_caption("Space Roosters")
+
+# init music
+pg.mixer.init()
+pg.mixer.music.set_volume(1.0)
+pg.mixer.music.load(MUSIC_PATH)
+pg.mixer.music.play(loops=-1, fade_ms=50000)
+
 window = pg.display.set_mode(flags=pg.FULLSCREEN)
 
 # Init background

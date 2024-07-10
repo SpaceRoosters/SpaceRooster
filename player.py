@@ -15,12 +15,7 @@ class Player:
     
     def handle_keys(self, keys):
         if keys[self.keys["up"]]:
-
-    def move(self, dx=0, dy=0):
-        self.pos[0] += dx
-        self.pos[1] += dy
-        self.direction[0] = dx
-        self.direction[1] = dy
+            pass
 
     def draw(self):
         self.window.blit(self.img, self.pos)
