@@ -15,9 +15,12 @@ pg.display.set_caption("Space Roosters")
 pg.mixer.init()
 pg.mixer.music.set_volume(1.0)
 pg.mixer.music.load(MUSIC_PATH)
-pg.mixer.music.play(loops=-1, fade_ms=50000)
+pg.mixer.music.play(loops=-1, fade_ms=2000)
 
 window = pg.display.set_mode(flags=pg.FULLSCREEN)
+
+# Some likely global variable
+running = True
 
 # Init background
 bkgr = None
@@ -35,23 +38,27 @@ score1 = scorebar.Scorebar(window)
 initBkgr()
 
 def handle():
+    global running
+
     # Background handling
     window.fill("black") # clear screen
     window.blit(bkgr, (0, 0))
+    
+    # Game draw
     player1.draw()
     kokoske.draw()
     score1.draw()
-    pg.display.flip()
 
-running = True
-while running:
+    # event handler
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
-        if event.type == pg.KEYDOWN:
-            pass
+    
+    player1.handle_keys(pg.key.get_pressed())
+    pg.display.flip()
+
+while running:
+    handle()
 
     while not kokoske.slide():
         handle()    
-    
-    handle()
