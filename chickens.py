@@ -1,13 +1,13 @@
 import pygame as pg
 import random
 
-CHICKEN_LIVES = 1
+CHICKEN_LIVES = 5
 ASSET_PATH = "./assets/"
 CHICKEN_SHIT = ASSET_PATH + "egg.png"
 DEAD_EFFECT = ASSET_PATH + "dead.ogg"
 EGG_EFFECT = ASSET_PATH + "egg.ogg"
-SHIT_RATE = 3
-SHIT_TIMER = 1000
+SHIT_RATE = 15
+SHIT_TIMER = 3200
 
 class Chickens():
     def __init__(self, location, window):
