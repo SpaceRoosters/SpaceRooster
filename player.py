@@ -59,7 +59,7 @@ class Player:
     
     def check_life(self, chickens, scorebar):
         spaceship = self.img.get_rect(x=self.x, y=self.y)
-        if chickens.collided(spaceship):
+        if chickens.collided(spaceship) or chickens.collided_egg(spaceship):
             if scorebar.kill_me() <= 0:
                 sys.exit(-1)
     

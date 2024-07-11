@@ -1,12 +1,21 @@
 import pygame as pg
+import random
+
 CHICKEN_LIVES = 2
+ASSET_PATH = "./assets/"
+CHICKEN_SHIT = ASSET_PATH + "egg.png"
+SHIT_RATE = 2
+SHIT_TIMER = 1000
 
 class Chickens():
     def __init__(self, location, window):
         ww, _ = pg.display.get_surface().get_size()
         self.chickens = []
+        self.chicken_shit = []
         self.speed = 10  # per pixel
         self.img = pg.image.load(location)
+        self.shit_asset = pg.transform.scale(pg.image.load(CHICKEN_SHIT), (25, 40))
+        self.last_shit_time = 0
 
         for row in range(5):
             for col in range(8):
@@ -25,17 +34,30 @@ class Chickens():
         reached = True
 
         for chicken in self.chickens:
+            self.window.blit(self.img, (chicken['x'], chicken['y']))
+
             if chicken['x'] != chicken['target']:
                 if abs(chicken['x'] - chicken['target']) <= self.speed:
                     chicken['x'] = chicken['target']
                 elif chicken['x'] > chicken['target']:
-                    chicken['x'] -= self.speed
+                    chicken['x'] -= random.randint(1, self.speed)
                     reached = False
                 elif chicken['x'] < chicken['target']:
-                    chicken['x'] += self.speed
+                    chicken['x'] += random.randint(1, self.speed)
                     reached = False
 
         return reached
+
+    def slide_shit(self):
+        _, wh = pg.display.get_surface().get_size()
+        self.shit()
+
+        for shit in self.chicken_shit:
+            shit["y"] += random.randint(1, self.speed)
+            self.window.blit(self.shit_asset, (shit["x"], shit["y"]))
+         
+            if shit["y"] > wh:
+                self.chicken_shit.remove(shit)
     
     def collided(self, ammo):
         out = False
@@ -45,11 +67,24 @@ class Chickens():
                 chicken["lives"] -= 1
                 if chicken["lives"] <= 0:
                     self.chickens.remove(chicken)
-                
                 out = True
         
         return out
+    
+    def collided_egg(self, spaceship):
+        out = False
 
-    def draw(self):
-        for chicken in self.chickens:
-            self.window.blit(self.img, (chicken['x'], chicken['y']))
+        for shit in self.chicken_shit:
+            if spaceship.colliderect(self.img.get_rect(x=shit["x"], y=shit["y"])):
+                self.chicken_shit.remove(shit)
+                out = True
+        
+        return out
+    
+    def shit(self):
+        ticks = pg.time.get_ticks()
+        if ticks - self.last_shit_time >= SHIT_TIMER:
+            self.last_shit_time = ticks
+            for _ in range(SHIT_RATE):
+                chicken = random.choice(self.chickens)
+                self.chicken_shit.append({"x": chicken["x"] + self.img.get_width() // 2, "y": chicken["y"] + self.img.get_height()})

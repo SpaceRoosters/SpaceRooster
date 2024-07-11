@@ -6,7 +6,7 @@ import scorebar
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
 MUSIC_PATH = ASSET_PATH + "music.mp3"
-FPS = 120
+FPS = 30
 
 # init window
 pg.init()
@@ -26,18 +26,12 @@ ww, wh = pg.display.get_surface().get_size()
 running = True
 
 # Init background
-bkgr = None
-
-def initBkgr():
-    global bkgr
-    bkgr = pg.transform.scale(pg.image.load(BKGR_PATH), (ww, wh))
+bkgr = pg.transform.scale(pg.image.load(BKGR_PATH), (ww, wh))    
 
 # init and compile assets
 kokoske = chickens.Chickens(ASSET_PATH + "DroneChicken.png", window)
 player1 = player.Player(window)
 score1 = scorebar.Scorebar(window)
-
-initBkgr()
 
 def handle():
     global running
@@ -47,11 +41,14 @@ def handle():
     window.blit(bkgr, (0, 0))
     
     # Game draw
-    kokoske.draw()
+    kokoske.slide()
+    kokoske.slide_shit()
+
     player1.draw()
     player1.check_life(kokoske, score1)
-    score1.draw()
     player1.draw_bullet(kokoske, score1)
+
+    score1.draw()
 
     # event handler
     for event in pg.event.get():
@@ -62,9 +59,8 @@ def handle():
     pg.display.flip()
 
 while running:
+    clk.tick(FPS)
     handle()
 
     while not kokoske.slide():
         handle()    
-    
-    clk.tick(FPS)
