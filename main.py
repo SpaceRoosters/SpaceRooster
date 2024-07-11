@@ -6,10 +6,12 @@ import scorebar
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
 MUSIC_PATH = ASSET_PATH + "music.mp3"
+FPS = 120
 
 # init window
 pg.init()
 pg.display.set_caption("Space Roosters")
+clk = pg.time.Clock()
 
 # init music
 pg.mixer.init()
@@ -18,6 +20,7 @@ pg.mixer.music.load(MUSIC_PATH)
 pg.mixer.music.play(loops=-1, fade_ms=2000)
 
 window = pg.display.set_mode(flags=pg.FULLSCREEN)
+ww, wh = pg.display.get_surface().get_size()
 
 # Some likely global variable
 running = True
@@ -27,7 +30,6 @@ bkgr = None
 
 def initBkgr():
     global bkgr
-    ww, wh = pg.display.get_surface().get_size()
     bkgr = pg.transform.scale(pg.image.load(BKGR_PATH), (ww, wh))
 
 # init and compile assets
@@ -45,9 +47,11 @@ def handle():
     window.blit(bkgr, (0, 0))
     
     # Game draw
-    player1.draw()
     kokoske.draw()
+    player1.draw()
+    player1.check_life(kokoske, score1)
     score1.draw()
+    player1.draw_bullet(kokoske, score1)
 
     # event handler
     for event in pg.event.get():
@@ -62,3 +66,5 @@ while running:
 
     while not kokoske.slide():
         handle()    
+    
+    clk.tick(FPS)

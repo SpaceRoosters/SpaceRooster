@@ -12,11 +12,12 @@ class Scorebar:
         self.font = pg.font.Font(SF_PATH, 59)
         self.img = pg.image.load(SB_PATH)
     
-    def addScore(self, rScore):
+    def add_score(self, rScore):
         self.score += rScore
     
-    def killMe(self):
+    def kill_me(self):
         self.lives -= 1
+        return self.lives
 
     def draw(self):
         self.window.blit(self.img, (0, 0))
