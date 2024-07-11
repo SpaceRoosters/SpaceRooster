@@ -1,23 +1,16 @@
 import pygame as pg
 import chickens
 import player
-import scorebar
+import infobar
 
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
-MUSIC_PATH = ASSET_PATH + "music.mp3"
-FPS = 30
+FPS = 100
 
 # init window
 pg.init()
 pg.display.set_caption("Space Roosters")
 clk = pg.time.Clock()
-
-# init music
-pg.mixer.init()
-pg.mixer.music.set_volume(1.0)
-pg.mixer.music.load(MUSIC_PATH)
-pg.mixer.music.play(loops=-1, fade_ms=2000)
 
 window = pg.display.set_mode(flags=pg.FULLSCREEN)
 ww, wh = pg.display.get_surface().get_size()
@@ -31,7 +24,7 @@ bkgr = pg.transform.scale(pg.image.load(BKGR_PATH), (ww, wh))
 # init and compile assets
 kokoske = chickens.Chickens(ASSET_PATH + "DroneChicken.png", window)
 player1 = player.Player(window)
-score1 = scorebar.Scorebar(window)
+info1 = infobar.Infobar(window)
 
 def handle():
     global running
@@ -41,14 +34,14 @@ def handle():
     window.blit(bkgr, (0, 0))
     
     # Game draw
-    kokoske.slide()
     kokoske.slide_shit()
+    kokoske.slide()
 
     player1.draw()
-    player1.check_life(kokoske, score1)
-    player1.draw_bullet(kokoske, score1)
+    player1.check_life(kokoske, info1)
+    player1.draw_bullet(kokoske, info1)
 
-    score1.draw()
+    info1.draw(clk.get_fps())
 
     # event handler
     for event in pg.event.get():
@@ -63,4 +56,4 @@ while running:
     handle()
 
     while not kokoske.slide():
-        handle()    
+        handle()

@@ -1,10 +1,12 @@
 import pygame as pg
 import random
 
-CHICKEN_LIVES = 2
+CHICKEN_LIVES = 5
 ASSET_PATH = "./assets/"
 CHICKEN_SHIT = ASSET_PATH + "egg.png"
-SHIT_RATE = 2
+DEAD_EFFECT = ASSET_PATH + "dead.ogg"
+EGG_EFFECT = ASSET_PATH + "egg.ogg"
+SHIT_RATE = 3
 SHIT_TIMER = 1000
 
 class Chickens():
@@ -15,6 +17,9 @@ class Chickens():
         self.speed = 10  # per pixel
         self.img = pg.image.load(location)
         self.shit_asset = pg.transform.scale(pg.image.load(CHICKEN_SHIT), (25, 40))
+        self.dead_effect = pg.mixer.Sound(DEAD_EFFECT)
+        self.dead_effect.set_volume(0.2)
+        self.egg_effect = pg.mixer.Sound(EGG_EFFECT)
         self.last_shit_time = 0
 
         for row in range(5):
@@ -24,7 +29,7 @@ class Chickens():
                 else:
                     x = ww + (col * (self.img.get_width() + 10))
 
-                y = (row * (self.img.get_height() + 10)) + 50
+                y = (row * (self.img.get_height() + 10)) + 80
                 target_x = (col * (self.img.get_width() + 10)) + (ww // 2 - self.img.get_width() * 5 + 70)
                 self.chickens.append({'x': x, 'y': y, 'target': target_x, 'lives': CHICKEN_LIVES})
 
@@ -50,14 +55,17 @@ class Chickens():
 
     def slide_shit(self):
         _, wh = pg.display.get_surface().get_size()
-        self.shit()
 
-        for shit in self.chicken_shit:
-            shit["y"] += random.randint(1, self.speed)
-            self.window.blit(self.shit_asset, (shit["x"], shit["y"]))
-         
-            if shit["y"] > wh:
-                self.chicken_shit.remove(shit)
+        if len(self.chickens) > 0:
+            self.shit()
+
+            for shit in self.chicken_shit:
+                shit["y"] += random.randint(1, self.speed)
+                self.window.blit(self.shit_asset, (shit["x"], shit["y"]))
+            
+                if shit["y"] > wh:
+                    self.chicken_shit.remove(shit)
+                    self.egg_effect.play()
     
     def collided(self, ammo):
         out = False
@@ -67,6 +75,7 @@ class Chickens():
                 chicken["lives"] -= 1
                 if chicken["lives"] <= 0:
                     self.chickens.remove(chicken)
+                    self.dead_effect.play()
                 out = True
         
         return out
@@ -75,7 +84,7 @@ class Chickens():
         out = False
 
         for shit in self.chicken_shit:
-            if spaceship.colliderect(self.img.get_rect(x=shit["x"], y=shit["y"])):
+            if spaceship.colliderect(self.shit_asset.get_rect(x=shit["x"], y=shit["y"])):
                 self.chicken_shit.remove(shit)
                 out = True
         

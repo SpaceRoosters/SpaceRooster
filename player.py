@@ -4,6 +4,8 @@ import sys
 ASSET_PATH = "./assets/"
 SS_PATH = ASSET_PATH + "ss.png"
 NUT_PATH = ASSET_PATH + "neutron.png"
+SHOOT_EFFECT = ASSET_PATH + "shoot.ogg"
+EXPL_EFFECT = ASSET_PATH + "explosion.ogg"
 SHOOT_TIME = 250
 CHICKEN_KILL = 150 # score
 DEF_KB = {"up": pg.K_UP, "down": pg.K_DOWN, "left": pg.K_LEFT, "right": pg.K_RIGHT, "fire": pg.K_SPACE}
@@ -21,6 +23,10 @@ class Player:
         self.handling_keys = keys
         self.bullets = []
         self.last_shoot_time = 0
+        self.shoot_effect = pg.mixer.Sound(SHOOT_EFFECT)
+        self.shoot_effect.set_volume(0.1)   
+        self.expl_effect = pg.mixer.Sound(EXPL_EFFECT)
+        self.expl_effect.set_volume(0.2)
 
     def move(self, rx, ry):
         ww, wh = pg.display.get_surface().get_size()
@@ -56,10 +62,12 @@ class Player:
             xPos = self.x + -self.ammo_files["neutron"].get_width() // 3
             yPos = self.y + -self.img.get_height()
             self.bullets.append([xPos, yPos])
+            self.shoot_effect.play()
     
     def check_life(self, chickens, scorebar):
         spaceship = self.img.get_rect(x=self.x, y=self.y)
         if chickens.collided(spaceship) or chickens.collided_egg(spaceship):
+            self.expl_effect.play()
             if scorebar.kill_me() <= 0:
                 sys.exit(-1)
     
