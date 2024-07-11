@@ -1,7 +1,7 @@
 import pygame as pg
 import random
 
-CHICKEN_LIVES = 5
+CHICKEN_LIVES = 1
 ASSET_PATH = "./assets/"
 CHICKEN_SHIT = ASSET_PATH + "egg.png"
 DEAD_EFFECT = ASSET_PATH + "dead.ogg"
@@ -35,7 +35,8 @@ class Chickens():
 
         self.window = window
 
-    def slide(self):
+    def slide(self, lr=False):
+        ww, _ = pg.display.get_surface().get_size()
         reached = True
 
         for chicken in self.chickens:
@@ -50,9 +51,12 @@ class Chickens():
                 elif chicken['x'] < chicken['target']:
                     chicken['x'] += random.randint(1, self.speed)
                     reached = False
+            
+            if lr:
+                chicken["target"] = random.randint(0, ww)
 
         return reached
-
+                
     def slide_shit(self):
         _, wh = pg.display.get_surface().get_size()
 

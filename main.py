@@ -26,7 +26,7 @@ kokoske = chickens.Chickens(ASSET_PATH + "DroneChicken.png", window)
 player1 = player.Player(window)
 info1 = infobar.Infobar(window)
 
-def handle():
+def handle(slide_var=True):
     global running
 
     # Background handling
@@ -35,7 +35,7 @@ def handle():
     
     # Game draw
     kokoske.slide_shit()
-    kokoske.slide()
+    kokoske.slide(slide_var)
 
     player1.draw()
     player1.check_life(kokoske, info1)
@@ -56,4 +56,4 @@ while running:
     handle()
 
     while not kokoske.slide():
-        handle()
+        handle(False)
