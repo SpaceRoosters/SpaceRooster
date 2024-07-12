@@ -6,7 +6,6 @@ import infobar
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
 FPS = 100
-INVASION_DELAYS = -100000
 
 # init window
 pg.init()
@@ -18,13 +17,14 @@ ww, wh = window.get_size()
 
 # Some likely global variable
 running = True
-slide_switch = False
+slide_lr = False
+slide_up = False
 currLvlID = 0
 
 lvls = [
-    [chickens.Chickens(ASSET_PATH + "DroneChicken.png", window), "Chapter 1: The Initial Wave"],
-    [chickens.Chickens(ASSET_PATH + "ChickenRegular.png", window, 4, 13, 2000), "Chapter 2: Straigth Jumps"],
-    [chickens.Chickens(ASSET_PATH + "MilitaryChicken.png", window, 8, 13, 1850), "Chapter 3: You are wrecked!"]
+    [chickens.Chickens(ASSET_PATH + "DroneChicken.png", window), "Chapter 1: The Initial Wave", True, False],
+    [chickens.Chickens(ASSET_PATH + "ChickenRegular.png", window, 4, 13, 2000), "Chapter 2: Straigth Jumps", False, True],
+    [chickens.Chickens(ASSET_PATH + "MilitaryChicken.png", window, 8, 13, 1850), "Chapter 3: You are wrecked!", True, True]
 ]
 
 # Init background
@@ -60,11 +60,16 @@ while running:
     # Background
     window.blit(bkgr, (0, 0))
 
-    if lvls[currLvlID][0].slide(slide_switch):
-        slide_switch = True
+    if lvls[currLvlID][0].slide(lr=slide_lr, ud=slide_up):
+        if lvls[currLvlID][2]:
+            slide_lr = True
+        if lvls[currLvlID][3]:
+            slide_up = True
 
     handle()
     
     if lvls[currLvlID][0].is_over():
-        slide_switch = False
+        slide_lr = False
+        slide_up = False
         currLvlID += 1
+        if currLvlID > len(lvls) - 1: break

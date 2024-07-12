@@ -3,7 +3,7 @@ import pygame as pg
 ASSET_PATH = "./assets/"
 SF_PATH = ASSET_PATH + "infobar.ttf"
 SB_PATH = ASSET_PATH + "scorebar.png"
-DEF_LIVES = 150
+DEF_LIVES = 500
 
 class Infobar:
     def __init__(self, window):

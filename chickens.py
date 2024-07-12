@@ -40,33 +40,46 @@ class Chickens():
 
                 y = (row * (self.img.get_height() + 10)) + 80
                 target_x = (col * (self.img.get_width() + 10)) + (ww // 2 - self.img.get_width() * 5 + 70)
-                self.chickens.append({"x": x, "y": y, "target": target_x, "lives": chicken_lives, "packet": False})
+                self.chickens.append({"x": x, "y": y, "target_x": target_x, "target_y": y, "lives": chicken_lives, "packet": False})
 
         if random.getrandbits(1):
             random.choice(self.chickens)["packet"] = True
 
-    def slide(self, lr=False):
-        ww = self.window.get_width()
+    def slide(self, lr=False, ud=False):
+        ww, wh = self.window.get_size()
         reached = True
 
         for chicken in self.chickens:
             self.window.blit(self.img, (chicken["x"], chicken["y"]))
 
-            if chicken["x"] != chicken["target"]:
-                if abs(chicken["x"] - chicken["target"]) <= self.speed:
-                    chicken["x"] = chicken["target"]
-                elif chicken["x"] > chicken["target"]:
+            if chicken["x"] != chicken["target_x"]:
+                if abs(chicken["x"] - chicken["target_x"]) <= self.speed:
+                    chicken["x"] = chicken["target_x"]
+                elif chicken["x"] > chicken["target_x"]:
                     chicken["x"] -= random.randint(1, self.speed)
                     reached = False
-                elif chicken["x"] < chicken["target"]:
+                elif chicken["x"] < chicken["target_x"]:
                     chicken["x"] += random.randint(1, self.speed)
                     reached = False
-            
-            if lr and chicken["target"] == chicken["x"]:
-                chicken["target"] = random.randint(0, ww - self.img.get_width())
+
+            if chicken["y"] != chicken["target_y"]:
+                if abs(chicken["y"] - chicken["target_y"]) <= self.speed:
+                    chicken["y"] = chicken["target_y"]
+                elif chicken["y"] > chicken["target_y"]:
+                    chicken["y"] -= random.randint(1, self.speed)
+                    reached = False
+                elif chicken["y"] < chicken["target_y"]:
+                    chicken["y"] += random.randint(1, self.speed)
+                    reached = False
+
+            if lr and chicken["target_x"] == chicken["x"]:
+                chicken["target_x"] = random.randint(0, ww - self.img.get_width())
+
+            if ud and chicken["target_y"] == chicken["y"]:
+                chicken["target_y"] = random.randint(0, wh - self.img.get_height() - 162)
 
         return reached
-                
+    
     def slide_shit(self):
         wh = self.window.get_height()
         self.shit()

@@ -25,7 +25,7 @@ class Player:
         self.bullets = []
         self.last_shoot_time = 0
         self.shoot_effect = pg.mixer.Sound(SHOOT_EFFECT)
-        self.shoot_effect.set_volume(0.2)   
+        self.shoot_effect.set_volume(0.2)
         self.expl_effect = pg.mixer.Sound(EXPL_EFFECT)
         self.expl_effect.set_volume(0.2)
         self.shoot_boom = 1
