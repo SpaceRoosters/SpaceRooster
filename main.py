@@ -38,7 +38,7 @@ def handle(slide_var=True):
     kokoske.slide(slide_var)
 
     player1.draw()
-    player1.check_life(kokoske, info1)
+    player1.check(kokoske, info1)
     player1.draw_bullet(kokoske, info1)
 
     info1.draw(clk.get_fps())

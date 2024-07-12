@@ -6,6 +6,7 @@ SS_PATH = ASSET_PATH + "ss.png"
 NUT_PATH = ASSET_PATH + "neutron.png"
 SHOOT_EFFECT = ASSET_PATH + "shoot.ogg"
 EXPL_EFFECT = ASSET_PATH + "explosion.ogg"
+AMMO_EFFECT = ASSET_PATH + "ammo.ogg"
 SHOOT_TIME = 250
 CHICKEN_KILL = 150 # score
 DEF_KB = {"up": pg.K_UP, "down": pg.K_DOWN, "left": pg.K_LEFT, "right": pg.K_RIGHT, "fire": pg.K_SPACE}
@@ -27,6 +28,9 @@ class Player:
         self.shoot_effect.set_volume(0.1)   
         self.expl_effect = pg.mixer.Sound(EXPL_EFFECT)
         self.expl_effect.set_volume(0.2)
+        self.shoot_boom = 1
+        self.ammo_effect = pg.mixer.Sound(AMMO_EFFECT)
+        self.ammo_effect.set_volume(0.2)
 
     def move(self, rx, ry):
         ww, wh = pg.display.get_surface().get_size()
@@ -59,17 +63,24 @@ class Player:
         ticks = pg.time.get_ticks()
         if ticks - self.last_shoot_time >= SHOOT_TIME:
             self.last_shoot_time = ticks
-            xPos = self.x + -self.ammo_files["neutron"].get_width() // 3
+            xPos = self.x + self.ammo_files["neutron"].get_width() // 2
             yPos = self.y + -self.img.get_height()
             self.bullets.append([xPos, yPos])
             self.shoot_effect.play()
     
-    def check_life(self, chickens, scorebar):
+    def check(self, chickens, scorebar):
         spaceship = self.img.get_rect(x=self.x, y=self.y)
-        if chickens.collided(spaceship) or chickens.collided_egg(spaceship):
+        collide_msg = chickens.collided_shit(spaceship)
+        if chickens.collided(spaceship) or collide_msg == "egg":
             self.expl_effect.play()
+            self.shoot_boom -= 1
             if scorebar.kill_me() <= 0:
+                print("DEAD")
                 sys.exit(-1)
+        elif collide_msg == "ammo":
+            self.shoot_boom += 1
+            self.ammo_effect.play()
+            scorebar.add_score(500)
     
     def draw_bullet(self, chickens, scorebar):
         for coor in self.bullets:
@@ -81,7 +92,7 @@ class Player:
          
             if coor[1] < 0:
                 self.bullets.remove(coor)
-            elif chickens.collided(ammo_rect):
+            elif chickens.collided(ammo_rect, self.shoot_boom):
                 self.bullets.remove(coor)
                 scorebar.add_score(CHICKEN_KILL)
 
