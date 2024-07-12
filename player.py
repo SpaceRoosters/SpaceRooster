@@ -25,22 +25,22 @@ class Player:
         self.bullets = []
         self.last_shoot_time = 0
         self.shoot_effect = pg.mixer.Sound(SHOOT_EFFECT)
-        self.shoot_effect.set_volume(0.1)   
+        self.shoot_effect.set_volume(0.2)   
         self.expl_effect = pg.mixer.Sound(EXPL_EFFECT)
         self.expl_effect.set_volume(0.2)
         self.shoot_boom = 1
         self.ammo_effect = pg.mixer.Sound(AMMO_EFFECT)
-        self.ammo_effect.set_volume(0.2)
+        self.ammo_effect.set_volume(0.6)
 
     def move(self, rx, ry):
         ww, wh = self.window.get_size()
         self.x += rx
         self.y += ry
 
-        if self.y < 0:
-            self.y = 0
-        elif self.y > wh - self.img.get_height():
-            self.y = wh - self.img.get_height()
+        if self.y < 81:
+            self.y = 81
+        elif self.y > wh - 162:
+            self.y = wh - 162
 
         if self.x < 0:
             self.x = 0
@@ -73,9 +73,12 @@ class Player:
         collide_msg = chickens.collided_shit(spaceship)
         if chickens.collided(spaceship) or collide_msg == "egg":
             self.expl_effect.play()
-            self.shoot_boom -= 1
+            scorebar.add_score(-1000)
+            
+            if self.shoot_boom - 1 > 0:
+                self.shoot_boom -= 1
+            
             if scorebar.kill_me() <= 0:
-                print("DEAD")
                 sys.exit(-1)
         elif collide_msg == "ammo":
             self.shoot_boom += 1
@@ -98,4 +101,3 @@ class Player:
 
     def draw(self):
         self.window.blit(self.img, (self.x, self.y))
-

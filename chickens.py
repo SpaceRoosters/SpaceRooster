@@ -9,7 +9,7 @@ EGG_EFFECT = ASSET_PATH + "egg.ogg"
 MINI_EFFECT = ASSET_PATH + "mini_life.ogg"
 
 DEF_CHICKEN_LIVES = 2
-DEF_SHIT_RATE = 3
+DEF_SHIT_RATE = 5
 DEF_SHIT_TIMER = 2250
 
 class Chickens():
@@ -22,9 +22,10 @@ class Chickens():
         self.shit_asset = pg.image.load(CHICKEN_SHIT).convert_alpha()
         self.ammo_asset = pg.image.load(AMMO_ASSET).convert_alpha()
         self.dead_effect = pg.mixer.Sound(DEAD_EFFECT)
-        self.dead_effect.set_volume(0.2)
+        self.dead_effect.set_volume(0.3)
         self.egg_effect = pg.mixer.Sound(EGG_EFFECT)
         self.mini_effect = pg.mixer.Sound(MINI_EFFECT)
+        self.mini_effect.set_volume(0.4)
         self.window = window
         self.last_shit_time = 0
         self.shit_rate = shit_rate
@@ -40,8 +41,9 @@ class Chickens():
                 y = (row * (self.img.get_height() + 10)) + 80
                 target_x = (col * (self.img.get_width() + 10)) + (ww // 2 - self.img.get_width() * 5 + 70)
                 self.chickens.append({"x": x, "y": y, "target": target_x, "lives": chicken_lives, "packet": False})
-    
-        random.choice(self.chickens)["packet"] = True
+
+        if random.getrandbits(1):
+            random.choice(self.chickens)["packet"] = True
 
     def slide(self, lr=False):
         ww = self.window.get_width()
@@ -60,8 +62,8 @@ class Chickens():
                     chicken["x"] += random.randint(1, self.speed)
                     reached = False
             
-            if lr:
-                chicken["target"] = random.randint(0, ww)
+            if lr and chicken["target"] == chicken["x"]:
+                chicken["target"] = random.randint(0, ww - self.img.get_width())
 
         return reached
                 
@@ -110,9 +112,10 @@ class Chickens():
         ticks = pg.time.get_ticks()
         if ticks - self.last_shit_time >= self.shit_timer:
             self.last_shit_time = ticks
-            for _ in range(self.shit_rate):
-                chicken = random.choice(self.chickens)
-                self.chicken_shit.append({"x": chicken["x"] + self.img.get_width() // 2, "y": chicken["y"] + self.img.get_height(), "packet": False})
+            if len(self.chickens) > 0:
+                for _ in range(self.shit_rate):
+                    chicken = random.choice(self.chickens)
+                    self.chicken_shit.append({"x": chicken["x"] + self.img.get_width() // 2, "y": chicken["y"] + self.img.get_height(), "packet": False})
 
     def is_over(self):
         return len(self.chickens) <= 0 and len(self.chicken_shit) <= 0

@@ -3,7 +3,7 @@ import pygame as pg
 ASSET_PATH = "./assets/"
 SF_PATH = ASSET_PATH + "infobar.ttf"
 SB_PATH = ASSET_PATH + "scorebar.png"
-DEF_LIVES = 3
+DEF_LIVES = 150
 
 class Infobar:
     def __init__(self, window):
@@ -15,6 +15,7 @@ class Infobar:
     
     def add_score(self, rScore):
         self.score += rScore
+        if self.score < 0: self.score = 0
     
     def kill_me(self):
         self.lives -= 1
