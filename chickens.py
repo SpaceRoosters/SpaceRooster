@@ -7,6 +7,7 @@ CHICKEN_SHIT = ASSET_PATH + "egg.png"
 AMMO_ASSET = ASSET_PATH + "packet.png"
 DEAD_EFFECT = ASSET_PATH + "dead.ogg"
 EGG_EFFECT = ASSET_PATH + "egg.ogg"
+MINI_EFFECT = ASSET_PATH + "mini_life.ogg"
 SHIT_RATE = 3
 SHIT_TIMER = 2250
 
@@ -16,12 +17,13 @@ class Chickens():
         self.chickens = []
         self.chicken_shit = []
         self.speed = 10  # per pixel
-        self.img = pg.image.load(location)
-        self.shit_asset = pg.image.load(CHICKEN_SHIT)
-        self.ammo_asset = pg.image.load(AMMO_ASSET)
+        self.img = pg.image.load(location).convert_alpha()
+        self.shit_asset = pg.image.load(CHICKEN_SHIT).convert_alpha()
+        self.ammo_asset = pg.image.load(AMMO_ASSET).convert_alpha()
         self.dead_effect = pg.mixer.Sound(DEAD_EFFECT)
         self.dead_effect.set_volume(0.2)
         self.egg_effect = pg.mixer.Sound(EGG_EFFECT)
+        self.mini_effect = pg.mixer.Sound(MINI_EFFECT)
         self.window = window
         self.last_shit_time = 0
 
@@ -86,6 +88,7 @@ class Chickens():
                     self.chickens.remove(chicken)
                     self.dead_effect.play()
                 out = True
+                self.mini_effect.play()
 
         return out
     

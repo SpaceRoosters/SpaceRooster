@@ -14,8 +14,8 @@ DEF_KB = {"up": pg.K_UP, "down": pg.K_DOWN, "left": pg.K_LEFT, "right": pg.K_RIG
 class Player:
     def __init__(self, window, keys=DEF_KB):
         ww, wh = pg.display.get_surface().get_size()
-        self.img = pg.transform.scale(pg.image.load(SS_PATH), (112, 100))
-        self.ammo_files = {"neutron": pg.image.load(NUT_PATH)}
+        self.img = pg.transform.scale(pg.image.load(SS_PATH).convert_alpha(), (112, 100))
+        self.ammo_files = {"neutron": pg.image.load(NUT_PATH).convert_alpha()}
         self.x = ww // 2
         self.y = wh - 162
         self.speed = 10  # per pixel

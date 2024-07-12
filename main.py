@@ -19,7 +19,7 @@ ww, wh = pg.display.get_surface().get_size()
 running = True
 
 # Init background
-bkgr = pg.transform.scale(pg.image.load(BKGR_PATH), (ww, wh))    
+bkgr = pg.transform.scale(pg.image.load(BKGR_PATH).convert(), (ww, wh))
 
 # init and compile assets
 kokoske = chickens.Chickens(ASSET_PATH + "DroneChicken.png", window)
@@ -30,7 +30,6 @@ def handle(slide_var=True):
     global running
 
     # Background handling
-    window.fill("black") # clear screen
     window.blit(bkgr, (0, 0))
     
     # Game draw
@@ -41,7 +40,7 @@ def handle(slide_var=True):
     player1.check(kokoske, info1)
     player1.draw_bullet(kokoske, info1)
 
-    info1.draw(clk.get_fps())
+    info1.draw()
 
     # event handler
     for event in pg.event.get():
@@ -52,7 +51,7 @@ def handle(slide_var=True):
     pg.display.flip()
 
 while running:
-    clk.tick(FPS)
+    #clk.tick(FPS)
     handle()
 
     while not kokoske.slide():
