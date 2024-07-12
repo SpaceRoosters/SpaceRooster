@@ -8,12 +8,13 @@ AMMO_ASSET = ASSET_PATH + "packet.png"
 DEAD_EFFECT = ASSET_PATH + "dead.ogg"
 EGG_EFFECT = ASSET_PATH + "egg.ogg"
 MINI_EFFECT = ASSET_PATH + "mini_life.ogg"
-SHIT_RATE = 3
-SHIT_TIMER = 2250
+
+DEF_SHIT_RATE = 3
+DEF_SHIT_TIMER = 2250
 
 class Chickens():
-    def __init__(self, location, window):
-        ww, _ = pg.display.get_surface().get_size()
+    def __init__(self, location, window, shit_rate=DEF_SHIT_RATE, shit_timer=DEF_SHIT_TIMER):
+        ww = window.get_width()
         self.chickens = []
         self.chicken_shit = []
         self.speed = 10  # per pixel
@@ -26,6 +27,8 @@ class Chickens():
         self.mini_effect = pg.mixer.Sound(MINI_EFFECT)
         self.window = window
         self.last_shit_time = 0
+        self.shit_rate = shit_rate
+        self.shit_timer = shit_timer
 
         for row in range(5):
             for col in range(8):
@@ -41,7 +44,7 @@ class Chickens():
         random.choice(self.chickens)["packet"] = True
 
     def slide(self, lr=False):
-        ww, _ = pg.display.get_surface().get_size()
+        ww = self.window.get_width()
         reached = True
 
         for chicken in self.chickens:
@@ -63,7 +66,7 @@ class Chickens():
         return reached
                 
     def slide_shit(self):
-        _, wh = pg.display.get_surface().get_size()
+        wh = self.window.get_height()
 
         if len(self.chickens) > 0:
             self.shit()
@@ -107,8 +110,8 @@ class Chickens():
     
     def shit(self):
         ticks = pg.time.get_ticks()
-        if ticks - self.last_shit_time >= SHIT_TIMER:
+        if ticks - self.last_shit_time >= self.shit_timer:
             self.last_shit_time = ticks
-            for _ in range(SHIT_RATE):
+            for _ in range(self.shit_rate):
                 chicken = random.choice(self.chickens)
                 self.chicken_shit.append({"x": chicken["x"] + self.img.get_width() // 2, "y": chicken["y"] + self.img.get_height(), "packet": False})

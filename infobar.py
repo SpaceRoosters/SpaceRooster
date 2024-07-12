@@ -10,7 +10,7 @@ class Infobar:
         self.score = 0
         self.window = window
         self.font = pg.font.Font(SF_PATH, 59)
-        self.img = pg.image.load(SB_PATH).convert()
+        self.img = pg.image.load(SB_PATH).convert_alpha()
     
     def add_score(self, rScore):
         self.score += rScore
@@ -20,7 +20,7 @@ class Infobar:
         return self.lives
 
     def draw(self, chapter="Chapter 1: The Initial Wave"):
-        ww, _ = pg.display.get_surface().get_size()
+        ww = self.window.get_width()
         self.window.blit(self.img, (0, 0))
         self.window.blit(self.font.render("{:,}".format(self.score), True, "white"), (15, 0))
         self.lives += self.score // 1000000

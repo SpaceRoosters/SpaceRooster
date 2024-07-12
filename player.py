@@ -13,14 +13,14 @@ DEF_KB = {"up": pg.K_UP, "down": pg.K_DOWN, "left": pg.K_LEFT, "right": pg.K_RIG
 
 class Player:
     def __init__(self, window, keys=DEF_KB):
-        ww, wh = pg.display.get_surface().get_size()
+        self.window = window
+        ww, wh = self.window.get_size()
         self.img = pg.transform.scale(pg.image.load(SS_PATH).convert_alpha(), (112, 100))
         self.ammo_files = {"neutron": pg.image.load(NUT_PATH).convert_alpha()}
         self.x = ww // 2
         self.y = wh - 162
         self.speed = 10  # per pixel
         self.bullet_speed = 15
-        self.window = window
         self.handling_keys = keys
         self.bullets = []
         self.last_shoot_time = 0
@@ -33,7 +33,7 @@ class Player:
         self.ammo_effect.set_volume(0.2)
 
     def move(self, rx, ry):
-        ww, wh = pg.display.get_surface().get_size()
+        ww, wh = self.window.get_size()
         self.x += rx
         self.y += ry
 

@@ -5,15 +5,15 @@ import infobar
 
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
-FPS = 100
+FPS = 30
 
 # init window
 pg.init()
 pg.display.set_caption("Space Roosters")
 clk = pg.time.Clock()
 
-window = pg.display.set_mode(flags=pg.FULLSCREEN)
-ww, wh = pg.display.get_surface().get_size()
+window = pg.display.set_mode()
+ww, wh = window.get_size()
 
 # Some likely global variable
 running = True
@@ -51,7 +51,7 @@ def handle(slide_var=True):
     pg.display.flip()
 
 while running:
-    #clk.tick(FPS)
+    clk.tick(FPS)
     handle()
 
     while not kokoske.slide():
