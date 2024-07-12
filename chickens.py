@@ -1,7 +1,6 @@
 import pygame as pg
 import random
 
-CHICKEN_LIVES = 4
 ASSET_PATH = "./assets/"
 CHICKEN_SHIT = ASSET_PATH + "egg.png"
 AMMO_ASSET = ASSET_PATH + "packet.png"
@@ -9,11 +8,12 @@ DEAD_EFFECT = ASSET_PATH + "dead.ogg"
 EGG_EFFECT = ASSET_PATH + "egg.ogg"
 MINI_EFFECT = ASSET_PATH + "mini_life.ogg"
 
+DEF_CHICKEN_LIVES = 2
 DEF_SHIT_RATE = 3
 DEF_SHIT_TIMER = 2250
 
 class Chickens():
-    def __init__(self, location, window, shit_rate=DEF_SHIT_RATE, shit_timer=DEF_SHIT_TIMER):
+    def __init__(self, location, window, chicken_lives=DEF_CHICKEN_LIVES, shit_rate=DEF_SHIT_RATE, shit_timer=DEF_SHIT_TIMER):
         ww = window.get_width()
         self.chickens = []
         self.chicken_shit = []
@@ -39,7 +39,7 @@ class Chickens():
 
                 y = (row * (self.img.get_height() + 10)) + 80
                 target_x = (col * (self.img.get_width() + 10)) + (ww // 2 - self.img.get_width() * 5 + 70)
-                self.chickens.append({"x": x, "y": y, "target": target_x, "lives": CHICKEN_LIVES, "packet": False})
+                self.chickens.append({"x": x, "y": y, "target": target_x, "lives": chicken_lives, "packet": False})
     
         random.choice(self.chickens)["packet"] = True
 
@@ -67,17 +67,15 @@ class Chickens():
                 
     def slide_shit(self):
         wh = self.window.get_height()
+        self.shit()
 
-        if len(self.chickens) > 0:
-            self.shit()
-
-            for shit in self.chicken_shit:
-                shit["y"] += random.randint(1, self.speed)
-                self.window.blit(self.ammo_asset if shit["packet"] else self.shit_asset, (shit["x"], shit["y"]))
-            
-                if shit["y"] > wh:
-                    self.chicken_shit.remove(shit)
-                    self.egg_effect.play()
+        for shit in self.chicken_shit:
+            shit["y"] += random.randint(1, self.speed)
+            self.window.blit(self.ammo_asset if shit["packet"] else self.shit_asset, (shit["x"], shit["y"]))
+        
+            if shit["y"] > wh:
+                self.chicken_shit.remove(shit)
+                self.egg_effect.play()
     
     def collided(self, ammo, killrate=1):
         out = False
@@ -115,3 +113,6 @@ class Chickens():
             for _ in range(self.shit_rate):
                 chicken = random.choice(self.chickens)
                 self.chicken_shit.append({"x": chicken["x"] + self.img.get_width() // 2, "y": chicken["y"] + self.img.get_height(), "packet": False})
+
+    def is_over(self):
+        return len(self.chickens) <= 0 and len(self.chicken_shit) <= 0
