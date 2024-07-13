@@ -9,10 +9,10 @@ EXPL_EFFECT = ASSET_PATH + "explosion.ogg"
 AMMO_EFFECT = ASSET_PATH + "ammo.ogg"
 SHOOT_TIME = 250
 CHICKEN_KILL = 150 # score
-DEF_KB = {"up": pg.K_UP, "down": pg.K_DOWN, "left": pg.K_LEFT, "right": pg.K_RIGHT, "fire": pg.K_SPACE}
+P1_KB = {"up": pg.K_UP, "down": pg.K_DOWN, "left": pg.K_LEFT, "right": pg.K_RIGHT, "fire": pg.K_SPACE}
 
 class Player:
-    def __init__(self, window, keys=DEF_KB):
+    def __init__(self, window, keys=P1_KB):
         self.window = window
         ww, wh = self.window.get_size()
         self.img = pg.transform.scale(pg.image.load(SS_PATH).convert_alpha(), (112, 100))
@@ -95,7 +95,7 @@ class Player:
          
             if coor[1] < 0:
                 self.bullets.remove(coor)
-            elif chickens.collided(ammo_rect, self.shoot_boom):
+            elif chickens.collided(ammo_rect, kill_rate=self.shoot_boom):
                 self.bullets.remove(coor)
                 scorebar.add_score(CHICKEN_KILL)
 

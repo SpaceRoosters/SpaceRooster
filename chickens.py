@@ -92,12 +92,12 @@ class Chickens():
                 self.chicken_shit.remove(shit)
                 self.egg_effect.play()
     
-    def collided(self, ammo, killrate=1):
+    def collided(self, ammo, kill_rate=1):
         out = False
 
         for chicken in self.chickens:
             if ammo.colliderect(self.img.get_rect(x=chicken["x"], y=chicken["y"])):
-                chicken["lives"] -= killrate
+                chicken["lives"] -= kill_rate
                 if chicken["lives"] <= 0:
                     if chicken["packet"]:
                         self.chicken_shit.append({"x": chicken["x"] + self.img.get_width() // 2, "y": chicken["y"] + self.img.get_height(), "packet": True})
@@ -109,17 +109,12 @@ class Chickens():
         return out
     
     def collided_shit(self, spaceship):
-        out = ""
-
         for shit in self.chicken_shit:
             if spaceship.colliderect(self.shit_asset.get_rect(x=shit["x"], y=shit["y"])):
                 self.chicken_shit.remove(shit)
-                if shit["packet"]:
-                    out = "ammo"
-                else:
-                    out = "egg"
+                return "ammo" if shit["packet"] else "egg"
         
-        return out
+        return ""
     
     def shit(self):
         ticks = pg.time.get_ticks()

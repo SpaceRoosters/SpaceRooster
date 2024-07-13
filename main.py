@@ -2,6 +2,7 @@ import pygame as pg
 import chickens
 import player
 import infobar
+import charity
 
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
@@ -24,7 +25,8 @@ currLvlID = 0
 lvls = [
     [chickens.Chickens(ASSET_PATH + "DroneChicken.png", window), "Chapter 1: The Initial Wave", True, False],
     [chickens.Chickens(ASSET_PATH + "ChickenRegular.png", window, 4, 13, 2000), "Chapter 2: Straigth Jumps", False, True],
-    [chickens.Chickens(ASSET_PATH + "MilitaryChicken.png", window, 8, 13, 1850), "Chapter 3: You are wrecked!", True, True]
+    [chickens.Chickens(ASSET_PATH + "MilitaryChicken.png", window, 8, 13, 1850), "Chapter 3: You are wrecked!", True, True],
+    [charity.Charity(window), "Bonus: Prepare, charity is here!", False, False]
 ]
 
 # Init background
