@@ -69,7 +69,7 @@ class Boss:
         return self.lives <= 0 and not self.sliding
 
     def collided(self, box, kill_rate=1):
-        if box.colliderect(self.img.get_rect(x=self.x, y=self.y)) and self.lives >= 0:
+        if box.colliderect(self.img.get_rect(x=self.x, y=self.y)) and self.lives >= 0 and not self.sliding:
             self.lives -= kill_rate
             
             if self.lives <= 0: 
