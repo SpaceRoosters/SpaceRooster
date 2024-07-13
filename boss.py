@@ -32,20 +32,20 @@ class Boss:
             if abs(self.x - self.target_x) <= spaceship.speed // self.speed_part:
                 self.x = self.target_x
             elif self.x > self.target_x:
-                self.x -= random.randint(1, spaceship.speed // self.speed_part)
+                self.x -= random.randint(1, int(spaceship.speed // self.speed_part))
                 reached = False
             elif self.x < self.target_x:
-                self.x += random.randint(1, spaceship.speed // self.speed_part)
+                self.x += random.randint(1, int(spaceship.speed // self.speed_part))
                 reached = False
 
         if self.y != self.target_y:
             if abs(self.y - self.target_y) <= spaceship.speed // self.speed_part:
                 self.y = self.target_y
             elif self.y > self.target_y:
-                self.y -= random.randint(1, spaceship.speed // self.speed_part)
+                self.y -= random.randint(1, int(spaceship.speed // self.speed_part))
                 reached = False
             elif self.y < self.target_y:
-                self.y += random.randint(1, spaceship.speed // self.speed_part)
+                self.y += random.randint(1, int(spaceship.speed // self.speed_part))
                 reached = False
 
         if self.target_x == self.x and not self.sliding:
