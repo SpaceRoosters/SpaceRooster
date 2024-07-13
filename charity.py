@@ -49,7 +49,7 @@ class Charity:
         ticks = pg.time.get_ticks()
         if ticks - self.last_shoot_time >= self.shoot_timer:
             self.last_shoot_time = ticks
-            if not self.dead:
+            if not self.dead and (self.x >= 0 and self.x <= self.window.get_width()):
                 self.shits.append({"x": self.x + self.img.get_width() // 2, "y": self.y + self.img.get_height(), "packet": False})
 
     def collided_shit(self, spaceship):
@@ -66,7 +66,10 @@ class Charity:
     def collided(self, box, **_):
         if box.colliderect(self.img.get_rect(x=self.x, y=self.y)) and not self.dead:
             self.dead = True
-            self.shits.append({"x": self.x + self.img.get_width() // 2, "y": self.y + self.img.get_height(), "packet": True})
+
+            if random.getrandbits(1):
+                self.shits.append({"x": self.x + self.img.get_width() // 2, "y": self.y + self.img.get_height(), "packet": True})
+            
             self.expl_effect.play()
             return True
 
