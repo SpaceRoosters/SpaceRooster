@@ -52,7 +52,7 @@ class Charity:
             if not self.dead and (self.x >= 0 and self.x <= self.window.get_width()):
                 self.shits.append({"x": self.x + self.img.get_width() // 2, "y": self.y + self.img.get_height(), "packet": False})
 
-    def collided_shit(self, spaceship):
+    def collided_shit(self, spaceship=None):
         for shit in self.shits:
             if spaceship.colliderect(self.ammo.get_rect(x=shit["x"], y=shit["y"])):
                 self.shits.remove(shit)

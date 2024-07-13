@@ -45,7 +45,7 @@ class Chickens():
         if random.getrandbits(1):
             random.choice(self.chickens)["packet"] = True
 
-    def slide(self, lr=False, ud=False):
+    def slide(self, lr=False, ud=False, spaceship=None):
         ww, wh = self.window.get_size()
         reached = True
 
@@ -108,7 +108,7 @@ class Chickens():
 
         return out
     
-    def collided_shit(self, spaceship):
+    def collided_shit(self, spaceship=None):
         for shit in self.chicken_shit:
             if spaceship.colliderect(self.shit_asset.get_rect(x=shit["x"], y=shit["y"])):
                 self.chicken_shit.remove(shit)

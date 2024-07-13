@@ -9,6 +9,7 @@ EXPL_EFFECT = ASSET_PATH + "explosion.ogg"
 AMMO_EFFECT = ASSET_PATH + "ammo.ogg"
 SHOOT_TIME = 250
 CHICKEN_KILL = 150 # score
+DEF_SPEED = 10
 P1_KB = {"up": pg.K_UP, "down": pg.K_DOWN, "left": pg.K_LEFT, "right": pg.K_RIGHT, "fire": pg.K_SPACE}
 
 class Player:
@@ -19,7 +20,7 @@ class Player:
         self.ammo_files = {"neutron": pg.image.load(NUT_PATH).convert_alpha()}
         self.x = ww // 2
         self.y = wh - 162
-        self.speed = 10  # per pixel
+        self.speed = DEF_SPEED  # per pixel
         self.bullet_speed = 15
         self.handling_keys = keys
         self.bullets = []
@@ -70,7 +71,7 @@ class Player:
     
     def check(self, chickens, scorebar):
         spaceship = self.img.get_rect(x=self.x, y=self.y)
-        collide_msg = chickens.collided_shit(spaceship)
+        collide_msg = chickens.collided_shit(spaceship=spaceship)
         if chickens.collided(spaceship) or collide_msg == "egg":
             self.expl_effect.play()
             scorebar.add_score(-1000)

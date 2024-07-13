@@ -3,6 +3,7 @@ import chickens
 import player
 import infobar
 import charity
+import boss
 
 ASSET_PATH = "./assets/"
 BKGR_PATH = ASSET_PATH + "bkg.jpg"
@@ -26,7 +27,8 @@ lvls = [
     [chickens.Chickens(ASSET_PATH + "DroneChicken.png", window), "Chapter 1: The Initial Wave", True, False],
     [chickens.Chickens(ASSET_PATH + "ChickenRegular.png", window, 4, 13, 2000), "Chapter 2: Straigth Jumps", False, True],
     [chickens.Chickens(ASSET_PATH + "MilitaryChicken.png", window, 8, 13, 1850), "Chapter 3: You are wrecked!", True, True],
-    [charity.Charity(window), "Bonus: Prepare, charity is here!", False, False]
+    [charity.Charity(window), "Bonus: Prepare, charity is here!", None, None],
+    [boss.Boss(window), "Chapter 4: No more a hero?", None, None]
 ]
 
 # Init background
@@ -62,7 +64,7 @@ while running:
     # Background
     window.blit(bkgr, (0, 0))
 
-    if lvls[currLvlID][0].slide(lr=slide_lr, ud=slide_up):
+    if lvls[currLvlID][0].slide(lr=slide_lr, ud=slide_up, spaceship=player1):
         if lvls[currLvlID][2]:
             slide_lr = True
         if lvls[currLvlID][3]:
